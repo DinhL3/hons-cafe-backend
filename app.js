@@ -1,10 +1,17 @@
+require("dotenv").config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const cors = require("cors");
 
+const drinksRoutes = require('./routes/drinks-routes');
+const HttpError = require('./models/http-error');
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cors());
+
+app.use('/api/drinks', drinksRoutes);
 
 
 app.use((req, res, next) => {
@@ -21,9 +28,10 @@ app.use((error, req, res, next) => {
 });
 
 mongoose
-    .connect('mongodb+srv://lqdquangdinh:CWFxJTD2YCjWnWzO@cluster0.7ac5hft.mongodb.net/hons-cafe?retryWrites=true&w=majority')
+    .connect(`mongodb+srv://${process.env.ATLAS_USERNAME}:${process.env.ATLAS_PASSWORD}@cluster0.7ac5hft.mongodb.net/hons-cafe?retryWrites=true&w=majority`)
     .then(() => {
         app.listen(5000);
+        console.log(`MongoDB database connection established successfully!`);
     })
     .catch(err => {
         console.log(err);
