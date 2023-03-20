@@ -1,0 +1,23 @@
+{
+  "name": "hons-cafe-backend",
+  "version": "1.0.0",
+  "description": "Backend for Hon's Cafe",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "start": "nodemon app.js"
+  },
+  "author": "Dinh Le",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.21"
+  }
+}
