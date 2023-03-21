@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const OrderSchema = new Schema({
+const CartSchema = new Schema({
     drinks: [{
         drink: { type: Schema.Types.ObjectId, ref: 'Drink' },
         quantity: { type: Number, required: true }
@@ -11,7 +11,7 @@ const OrderSchema = new Schema({
     created_at: { type: Date, default: Date.now }
 });
 
-OrderSchema.pre('save', function (next) {
+CartSchema.pre('save', function (next) {
     let totalPrice = 0;
     for (let i = 0; i < this.drinks.length; i++) {
         totalPrice += this.drinks[i].product.price * this.drinks[i].quantity;
@@ -20,4 +20,4 @@ OrderSchema.pre('save', function (next) {
     next();
 });
 
-module.exports = mongoose.model('Order', OrderSchema);
+module.exports = mongoose.model('Cart', CartSchema);

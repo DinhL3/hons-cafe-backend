@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const cors = require("cors");
 
 const drinksRoutes = require('./routes/drinks-routes');
+const usersRoutes = require('./routes/users-routes');
+
 const HttpError = require('./models/http-error');
 
 const app = express();
@@ -12,6 +14,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.use('/api/drinks', drinksRoutes);
+app.use('/api/users', usersRoutes);
 
 
 app.use((req, res, next) => {
