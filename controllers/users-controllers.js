@@ -171,5 +171,50 @@ const login = async (req, res, next) => {
     });
 };
 
+const getLoggedInUser = async (req, res, next) => {
+    // Check if there is an Authorization header with a Bearer token
+    const authHeader = req.get('Authorization');
+    if (!authHeader) {
+        return next(new HttpError('Authorization failed, please try logging in again.', 401));
+    }
+
+    const token = authHeader.split(' ')[1]; // Split the header value to get the token part
+    let decodedToken;
+
+    try {
+        // Verify the token with the secret key used to sign it
+        decodedToken = jwt.verify(token, 'supersecret_dont_share');
+    } catch (err) {
+        return next(new HttpError('Authorization failed, please try logging in again.', 401));
+    }
+
+    // Extract the user ID from the decoded token
+    const userId = decodedToken.userId;
+
+    let existingUser;
+    try {
+        // Find the user by their ID
+        existingUser = await User.findById(userId);
+    } catch (err) {
+        const error = new HttpError(
+            'Fetching user failed, please try again later.',
+            500
+        );
+        return next(error);
+    }
+
+    if (!existingUser) {
+        const error = new HttpError('User not found.', 404);
+        return next(error);
+    }
+
+    res.json({
+        userId: existingUser.id,
+        userName: existingUser.userName,
+        email: existingUser.email,
+    });
+};
+
 exports.register = register;
 exports.login = login;
+exports.getLoggedInUser = getLoggedInUser;

@@ -20,4 +20,7 @@ router.post(
 
 router.post('/login', usersController.login);
 
+router.get('/me', usersController.getLoggedInUser);
+
+
 module.exports = router;
