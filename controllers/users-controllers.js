@@ -98,7 +98,12 @@ const register = async (req, res, next) => {
 
     res
         .status(201)
-        .json({ userId: createdUser.id, email: createdUser.email, token: token });
+        .json({
+            userId: createdUser.id,
+            userName: createdUser.userName,
+            email: createdUser.email,
+            token: token
+        });
 };
 
 const login = async (req, res, next) => {
@@ -160,6 +165,7 @@ const login = async (req, res, next) => {
 
     res.json({
         userId: existingUser.id,
+        userName: existingUser.userName,
         email: existingUser.email,
         token: token
     });

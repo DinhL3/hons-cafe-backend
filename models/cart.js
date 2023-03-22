@@ -8,7 +8,6 @@ const CartSchema = new Schema({
     }],
     user: { type: Schema.Types.ObjectId, ref: 'User' },
     totalPrice: { type: Number, required: true },
-    created_at: { type: Date, default: Date.now }
 });
 
 CartSchema.pre('save', function (next) {
