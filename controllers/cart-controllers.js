@@ -85,7 +85,6 @@ const clearCart = async (req, res, next) => {
 
 const increaseQuantity = async (req, res, next) => {
     const { drinkId } = req.params;
-    const { quantity } = req.body;
     try {
         let cart = await Cart.findOne({ user: req.user._id });
         if (!cart) {
@@ -97,8 +96,8 @@ const increaseQuantity = async (req, res, next) => {
         if (existingDrinkIndex === -1) {
             throw new HttpError('Drink not found in cart', 404);
         }
-        cart.drinks[existingDrinkIndex].quantity += quantity;
-        cart.totalPrice += quantity * cart.drinks[existingDrinkIndex].drink.price;
+        cart.drinks[existingDrinkIndex].quantity++;
+        cart.totalPrice += cart.drinks[existingDrinkIndex].drink.price;
         await cart.save();
         res.status(200).json({ message: 'Quantity increased', cart });
     } catch (error) {
@@ -108,7 +107,6 @@ const increaseQuantity = async (req, res, next) => {
 
 const decreaseQuantity = async (req, res, next) => {
     const { drinkId } = req.params;
-    const { quantity } = req.body;
     try {
         let cart = await Cart.findOne({ user: req.user._id });
         if (!cart) {
@@ -121,12 +119,12 @@ const decreaseQuantity = async (req, res, next) => {
             throw new HttpError('Drink not found in cart', 404);
         }
         const existingDrink = cart.drinks[existingDrinkIndex];
-        if (existingDrink.quantity - quantity <= 0) {
+        if (existingDrink.quantity - 1 <= 0) {
             cart.drinks.splice(existingDrinkIndex, 1);
-            cart.totalPrice -= existingDrink.quantity * existingDrink.drink.price;
+            cart.totalPrice -= existingDrink.drink.price;
         } else {
-            existingDrink.quantity -= quantity;
-            cart.totalPrice -= quantity * existingDrink.drink.price;
+            existingDrink.quantity--;
+            cart.totalPrice -= existingDrink.drink.price;
         }
         await cart.save();
         res.status(200).json({ message: 'Drink quantity decreased', cart });
@@ -134,7 +132,6 @@ const decreaseQuantity = async (req, res, next) => {
         next(new HttpError(error.message, error.status || 500));
     }
 };
-
 
 exports.getCart = getCart;
 exports.addToCart = addToCart;

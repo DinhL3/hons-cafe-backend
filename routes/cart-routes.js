@@ -4,7 +4,8 @@ const checkAuth = require('../middlewares/check-auth');
 const { check } = require('express-validator');
 const router = express.Router();
 
-router.get('/my-cart', checkAuth, cartControllers.getCart);
+router.get('/', checkAuth, cartControllers.getCart);
+
 router.post(
     '/add-to-cart',
     checkAuth,
@@ -22,7 +23,6 @@ router.delete('/', checkAuth, cartControllers.clearCart);
 router.patch(
     '/increase-quantity/:drinkId',
     checkAuth,
-    [check('quantity').isInt({ min: 1 })],
     cartControllers.increaseQuantity
 );
 
@@ -30,7 +30,6 @@ router.patch(
 router.patch(
     '/decrease-quantity/:drinkId',
     checkAuth,
-    [check('quantity').isInt({ min: 1 })],
     cartControllers.decreaseQuantity
 );
 

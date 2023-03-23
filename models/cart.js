@@ -13,7 +13,7 @@ const cartSchema = new Schema({
 cartSchema.pre('save', function (next) {
     let totalPrice = 0;
     for (let i = 0; i < this.drinks.length; i++) {
-        totalPrice += this.drinks[i].product.price * this.drinks[i].quantity;
+        totalPrice += this.drinks[i].price * this.drinks[i].quantity;
     }
     this.totalPrice = totalPrice;
     next();
