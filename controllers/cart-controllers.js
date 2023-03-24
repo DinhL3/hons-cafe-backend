@@ -23,10 +23,11 @@ const addToCart = async (req, res, next) => {
         }
         let cart = await Cart.findOne({ user: req.user._id });
         if (!cart) {
+            const totalDrinkPrice = drink.price * quantity;
             cart = new Cart({
                 user: req.user._id,
-                drinks: [{ drink: drinkId, quantity }],
-                totalPrice: drink.price * quantity
+                drinks: [{ drink: drinkId, quantity, totalDrinkPrice }],
+                totalPrice: totalDrinkPrice
             });
         } else {
             const existingDrinkIndex = cart.drinks.findIndex(
@@ -34,8 +35,10 @@ const addToCart = async (req, res, next) => {
             );
             if (existingDrinkIndex !== -1) {
                 cart.drinks[existingDrinkIndex].quantity += quantity;
+                cart.drinks[existingDrinkIndex].totalDrinkPrice += drink.price * quantity;
             } else {
-                cart.drinks.push({ drink: drinkId, quantity });
+                const totalDrinkPrice = drink.price * quantity;
+                cart.drinks.push({ drink: drinkId, quantity, totalDrinkPrice });
             }
             cart.totalPrice += drink.price * quantity;
         }
@@ -60,7 +63,8 @@ const removeItem = async (req, res, next) => {
             throw new HttpError('Drink not found in cart', 404);
         }
         const removedDrink = cart.drinks.splice(existingDrinkIndex, 1)[0];
-        cart.totalPrice -= removedDrink.quantity * removedDrink.drink.price;
+        const totalDrinkPrice = removedDrink.quantity * removedDrink.drink.price;
+        cart.totalPrice -= totalDrinkPrice;
         await cart.save();
         res.status(200).json({ message: 'Drink removed from cart', cart });
     } catch (error) {
@@ -97,7 +101,8 @@ const increaseQuantity = async (req, res, next) => {
             throw new HttpError('Drink not found in cart', 404);
         }
         cart.drinks[existingDrinkIndex].quantity++;
-        cart.totalPrice += cart.drinks[existingDrinkIndex].drink.price;
+        const drink = cart.drinks[existingDrinkIndex].drink;
+        cart.totalPrice += drink.price;
         await cart.save();
         res.status(200).json({ message: 'Quantity increased', cart });
     } catch (error) {
