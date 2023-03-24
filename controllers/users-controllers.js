@@ -1,3 +1,5 @@
+require("dotenv").config();
+const secretKey = process.env.SECRET_JWT_KEY;
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -85,7 +87,7 @@ const register = async (req, res, next) => {
     try {
         token = jwt.sign(
             { userId: createdUser.id, email: createdUser.email },
-            'supersecret_dont_share',
+            secretKey,
             { expiresIn: '5h' }
         );
     } catch (err) {
@@ -152,7 +154,7 @@ const login = async (req, res, next) => {
     try {
         token = jwt.sign(
             { userId: existingUser.id, email: existingUser.email },
-            'supersecret_dont_share',
+            secretKey,
             { expiresIn: '5h' }
         );
     } catch (err) {
@@ -183,7 +185,7 @@ const getLoggedInUser = async (req, res, next) => {
 
     try {
         // Verify the token with the secret key used to sign it
-        decodedToken = jwt.verify(token, 'supersecret_dont_share');
+        decodedToken = jwt.verify(token, secretKey);
     } catch (err) {
         return next(new HttpError('Authorization failed, please try logging in again.', 401));
     }
