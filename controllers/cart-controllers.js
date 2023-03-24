@@ -49,12 +49,12 @@ const addToCart = async (req, res, next) => {
 const removeItem = async (req, res, next) => {
     const { drinkId } = req.params;
     try {
-        let cart = await Cart.findOne({ user: req.user._id });
+        let cart = await Cart.findOne({ user: req.user._id }).populate('drinks.drink');
         if (!cart) {
             throw new HttpError('Cart not found', 404);
         }
         const existingDrinkIndex = cart.drinks.findIndex(
-            item => item.drink.toString() === drinkId.toString()
+            item => item.drink._id.toString() === drinkId.toString()
         );
         if (existingDrinkIndex === -1) {
             throw new HttpError('Drink not found in cart', 404);
@@ -86,12 +86,12 @@ const clearCart = async (req, res, next) => {
 const increaseQuantity = async (req, res, next) => {
     const { drinkId } = req.params;
     try {
-        let cart = await Cart.findOne({ user: req.user._id });
+        let cart = await Cart.findOne({ user: req.user._id }).populate('drinks.drink');
         if (!cart) {
             throw new HttpError('Cart not found', 404);
         }
         const existingDrinkIndex = cart.drinks.findIndex(
-            item => item.drink.toString() === drinkId.toString()
+            item => item.drink._id.toString() === drinkId.toString()
         );
         if (existingDrinkIndex === -1) {
             throw new HttpError('Drink not found in cart', 404);
@@ -108,12 +108,12 @@ const increaseQuantity = async (req, res, next) => {
 const decreaseQuantity = async (req, res, next) => {
     const { drinkId } = req.params;
     try {
-        let cart = await Cart.findOne({ user: req.user._id });
+        let cart = await Cart.findOne({ user: req.user._id }).populate('drinks.drink');
         if (!cart) {
             throw new HttpError('Cart not found', 404);
         }
         const existingDrinkIndex = cart.drinks.findIndex(
-            (item) => item.drink.toString() === drinkId.toString()
+            (item) => item.drink._id.toString() === drinkId.toString()
         );
         if (existingDrinkIndex === -1) {
             throw new HttpError('Drink not found in cart', 404);

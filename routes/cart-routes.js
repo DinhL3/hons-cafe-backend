@@ -14,10 +14,10 @@ router.post(
 );
 
 // Remove item from cart
-router.delete('/:drinkId', checkAuth, cartControllers.removeItem);
+router.delete('/remove-item/:drinkId', checkAuth, cartControllers.removeItem);
 
 // Clear cart
-router.delete('/', checkAuth, cartControllers.clearCart);
+router.delete('/clear-cart', checkAuth, cartControllers.clearCart);
 
 // Increase drink quantity in cart
 router.patch(
