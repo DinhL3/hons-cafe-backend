@@ -8,6 +8,8 @@ const morgan = require("morgan");
 const drinksRoutes = require('./routes/drinks-routes');
 const usersRoutes = require('./routes/users-routes');
 const cartRoutes = require('./routes/cart-routes');
+const ordersRoutes = require('./routes/orders-routes');
+
 
 
 const HttpError = require('./models/http-error');
@@ -22,6 +24,7 @@ app.use(cors());
 app.use('/api/drinks', drinksRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/cart', cartRoutes);
+app.use('/api/orders', ordersRoutes)
 
 app.use((req, res, next) => {
     const error = new HttpError('Could not find this route.', 404);

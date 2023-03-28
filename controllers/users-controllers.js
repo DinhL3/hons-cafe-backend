@@ -55,25 +55,7 @@ const register = async (req, res, next) => {
         orders: []
     });
 
-    let newCart;
     try {
-        newCart = new Cart({
-            drinks: [],
-            user: createdUser,
-            totalPrice: 0
-        });
-        await newCart.save();
-    } catch (err) {
-        console.log(err)
-        const error = new HttpError(
-            'Creating cart failed, please try again later.',
-            500
-        );
-        return next(error);
-    }
-
-    try {
-        createdUser.cart = newCart._id;
         await createdUser.save();
     } catch (err) {
         const error = new HttpError(

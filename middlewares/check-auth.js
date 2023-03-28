@@ -1,3 +1,5 @@
+require("dotenv").config();
+const secretKey = process.env.SECRET_JWT_KEY;
 const jwt = require('jsonwebtoken');
 const HttpError = require('../models/http-error');
 
@@ -7,7 +9,7 @@ const checkAuth = (req, res, next) => {
         if (!token) {
             throw new HttpError('Authentication failed', 401);
         }
-        const decodedToken = jwt.verify(token, 'supersecret_dont_share'); // replace with your own secret key
+        const decodedToken = jwt.verify(token, secretKey); // replace with your own secret key
         req.user = { _id: decodedToken.userId };
         next();
     } catch (error) {
