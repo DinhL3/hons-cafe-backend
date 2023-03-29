@@ -46,8 +46,8 @@ app.use((error, req, res, next) => {
 mongoose
     .connect(`mongodb+srv://${process.env.ATLAS_USERNAME}:${process.env.ATLAS_PASSWORD}@cluster0.7ac5hft.mongodb.net/hons-cafe?retryWrites=true&w=majority`)
     .then(() => {
-        app.listen(5000, () => {
-            console.log(`Server started and listening on port 5000`);
+        app.listen(process.env.PORT || 5000, () => {
+            console.log(`Server started and listening on port ${process.env.PORT || 5000}`);
         });
         console.log(`MongoDB database connection established successfully!`);
     })
