@@ -26,6 +26,10 @@ app.use('/api/users', usersRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', ordersRoutes)
 
+app.get('/', (req, res) => {
+    res.send('Hons Cafe Backend is working!');
+});
+
 app.use((req, res, next) => {
     const error = new HttpError('Could not find this route.', 404);
     throw error;
