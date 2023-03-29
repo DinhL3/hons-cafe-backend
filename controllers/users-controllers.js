@@ -55,11 +55,29 @@ const register = async (req, res, next) => {
         orders: []
     });
 
+
+
     try {
         await createdUser.save();
     } catch (err) {
         const error = new HttpError(
             'Signing up failed, please try again later.',
+            500
+        );
+        return next(error);
+    }
+
+    const newCart = new Cart({
+        user: createdUser.id,
+        drinks: [],
+        totalPrice: 0
+    });
+
+    try {
+        await newCart.save();
+    } catch (err) {
+        const error = new HttpError(
+            'Create new cart for user failed.',
             500
         );
         return next(error);
